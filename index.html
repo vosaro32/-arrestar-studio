@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARRESTAR STUDIO — Zip Hoodie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Alex+Brush&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:        #0a0908;
+    --panel:     #141210;
+    --panel-2:   #1c1917;
+    --line:      #2a2624;
+    --red:       #a91d24;
+    --red-bright:#d92b31;
+    --bone:      #ece6da;
+    --bone-dim:  #b9b2a6;
+    --muted:     #77706a;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--bone);
+    font-family:'Inter', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  a{ color:inherit; }
+
+  ::selection{ background:var(--red); color:var(--bone); }
+
+  /* film grain overlay */
+  .grain{
+    position:fixed; inset:0; pointer-events:none; z-index:500;
+    opacity:.05; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- nav ---------- */
+  header{
+    position:sticky; top:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px clamp(20px,5vw,64px);
+    background:rgba(10,9,8,.75);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .brand .dot{
+    width:14px; height:14px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--red-bright), var(--red) 70%);
+    box-shadow:0 0 12px rgba(217,43,49,.6);
+    flex-shrink:0;
+  }
+  .brand span{
+    font-family:'Anton', sans-serif; letter-spacing:.06em; font-size:15px;
+    color:var(--bone);
+  }
+  header nav a{
+    text-decoration:none; font-size:13px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--bone-dim); border:1px solid var(--line); padding:9px 16px; border-radius:2px;
+    transition:border-color .25s, color .25s;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  header nav a:hover{ border-color:var(--red-bright); color:var(--bone); }
+  header nav a:focus-visible{ outline:2px solid var(--red-bright); outline-offset:2px; }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    min-height:92vh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    padding:120px 20px 80px;
+    background:
+      radial-gradient(ellipse at 50% 20%, rgba(169,29,36,.18), transparent 60%),
+      linear-gradient(180deg, #0a0908 0%, #100d0c 60%, #0a0908 100%);
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:-20% -10%;
+    background-image:url('img/hoodie-2.jpg');
+    background-size:cover; background-position:center 20%;
+    filter:grayscale(1) contrast(1.15) brightness(.28);
+    opacity:.55;
+  }
+  .hero::after{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(10,9,8,.4) 0%, rgba(10,9,8,.75) 55%, #0a0908 100%);
+  }
+  .hero-content{ position:relative; z-index:2; max-width:900px; }
+  .hero-eyebrow{
+    font-size:12px; letter-spacing:.3em; text-transform:uppercase;
+    color:var(--red-bright); margin-bottom:22px; font-weight:600;
+  }
+  .hero h1{
+    font-family:'Anton', sans-serif;
+    font-weight:400;
+    font-size:clamp(40px, 8vw, 96px);
+    line-height:1.02;
+    letter-spacing:.01em;
+    margin:0 0 24px;
+    color:var(--bone);
+    text-wrap:balance;
+  }
+  .hero h1 em{
+    font-style:normal; color:var(--red-bright);
+  }
+  .hero-sub{
+    font-family:'Alex Brush', cursive;
+    font-size:clamp(24px,4vw,34px);
+    color:var(--bone-dim);
+    margin:0 0 34px;
+    transform:rotate(-2deg);
+  }
+  .badge{
+    display:inline-flex; align-items:center; gap:8px;
+    border:1px solid var(--line); border-radius:999px;
+    padding:8px 18px; font-size:12px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--bone-dim);
+  }
+  .badge .globe{ font-size:14px; }
+
+  .scroll-cue{
+    position:absolute; bottom:28px; left:50%; transform:translateX(-50%);
+    font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted);
+    display:flex; flex-direction:column; align-items:center; gap:8px; z-index:2;
+  }
+  .scroll-cue .line{ width:1px; height:36px; background:linear-gradient(var(--muted), transparent); animation:pulse-line 2s ease-in-out infinite; }
+  @keyframes pulse-line{ 0%,100%{ opacity:.3; } 50%{ opacity:1; } }
+
+  /* ---------- product ---------- */
+  .product{
+    max-width:1180px; margin:0 auto;
+    padding:clamp(60px,8vw,120px) clamp(20px,5vw,64px) 140px;
+    display:grid; grid-template-columns:1.1fr 1fr; gap:clamp(32px,6vw,80px);
+    align-items:start;
+  }
+
+  .gallery{ position:sticky; top:100px; }
+  .stage{
+    position:relative;
+    border-radius:4px; overflow:hidden;
+    background:var(--panel);
+    border:1px solid var(--line);
+    aspect-ratio:4/5;
+  }
+  .stage img{
+    width:100%; height:100%; object-fit:cover; display:block;
+    transition:opacity .35s ease;
+  }
+  .stage-overlay{
+    position:absolute; inset:0; display:flex; align-items:flex-end; justify-content:center;
+    padding-bottom:10%;
+    opacity:0; transition:opacity .4s ease;
+    background:linear-gradient(180deg, transparent 40%, rgba(10,9,8,.55) 100%);
+  }
+  .stage:hover .stage-overlay{ opacity:1; }
+  .stage-overlay span{
+    font-family:'Alex Brush', cursive; font-size:clamp(26px,3.5vw,38px);
+    color:var(--bone); transform:rotate(-4deg); text-shadow:0 2px 18px rgba(0,0,0,.6);
+  }
+  .thumbs{ display:flex; gap:12px; margin-top:14px; }
+  .thumbs button{
+    all:unset; cursor:pointer;
+    width:76px; height:96px; border-radius:3px; overflow:hidden;
+    border:1px solid var(--line); opacity:.55; transition:opacity .25s, border-color .25s;
+  }
+  .thumbs button.active, .thumbs button:hover{ opacity:1; border-color:var(--red-bright); }
+  .thumbs img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .thumbs button:focus-visible{ outline:2px solid var(--red-bright); outline-offset:2px; }
+
+  .details .eyebrow{
+    font-size:12px; letter-spacing:.25em; text-transform:uppercase; color:var(--red-bright);
+    font-weight:600; margin:0 0 14px;
+  }
+  .details h2{
+    font-family:'Anton', sans-serif; font-weight:400;
+    font-size:clamp(30px,4vw,44px); line-height:1.05; margin:0 0 16px; color:var(--bone);
+  }
+  .price-row{ display:flex; align-items:baseline; gap:14px; margin-bottom:26px; }
+  .price{ font-size:30px; font-weight:700; color:var(--bone); }
+  .price-note{ font-size:13px; color:var(--muted); }
+
+  .details p.desc{
+    color:var(--bone-dim); line-height:1.7; font-size:15.5px; margin:0 0 34px;
+    max-width:46ch;
+  }
+
+  .field-label{
+    font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted);
+    margin-bottom:12px; display:block;
+  }
+  .sizes{ display:flex; gap:10px; margin-bottom:8px; flex-wrap:wrap; }
+  .sizes button{
+    all:unset; cursor:pointer;
+    min-width:52px; text-align:center;
+    padding:12px 6px; border:1px solid var(--line); border-radius:2px;
+    font-size:14px; color:var(--bone-dim);
+    transition:all .2s ease;
+  }
+  .sizes button:hover{ border-color:var(--bone-dim); color:var(--bone); }
+  .sizes button.selected{ border-color:var(--red-bright); background:rgba(169,29,36,.14); color:var(--bone); }
+  .sizes button:focus-visible{ outline:2px solid var(--red-bright); outline-offset:2px; }
+  .size-hint{ font-size:12px; color:var(--muted); margin:0 0 30px; min-height:16px; }
+  .size-hint.error{ color:var(--red-bright); }
+
+  .buy-btn{
+    all:unset; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px;
+    width:100%; padding:19px 20px;
+    background:var(--red); color:#f4ece6;
+    font-size:14px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+    border-radius:2px; text-align:center;
+    transition:background .25s ease, transform .15s ease;
+    box-shadow:0 12px 30px -12px rgba(169,29,36,.7);
+  }
+  .buy-btn:hover{ background:var(--red-bright); }
+  .buy-btn:active{ transform:scale(.985); }
+  .buy-btn:focus-visible{ outline:2px solid var(--bone); outline-offset:3px; }
+
+  .assurance{
+    display:flex; gap:22px; margin-top:22px; flex-wrap:wrap;
+  }
+  .assurance div{ font-size:12px; color:var(--muted); display:flex; align-items:center; gap:7px; }
+
+  /* ---------- modal ---------- */
+  .modal-backdrop{
+    position:fixed; inset:0; background:rgba(6,5,5,.78);
+    display:none; align-items:center; justify-content:center; z-index:200;
+    padding:20px; backdrop-filter:blur(4px);
+  }
+  .modal-backdrop.open{ display:flex; }
+  .modal{
+    width:100%; max-width:440px;
+    background:var(--panel-2); border:1px solid var(--line); border-radius:6px;
+    padding:34px 32px 30px;
+    position:relative;
+    max-height:90vh; overflow-y:auto;
+  }
+  .modal-close{
+    all:unset; cursor:pointer; position:absolute; top:18px; right:18px;
+    width:30px; height:30px; display:flex; align-items:center; justify-content:center;
+    color:var(--muted); font-size:18px; border-radius:50%;
+    transition:color .2s, background .2s;
+  }
+  .modal-close:hover{ color:var(--bone); background:var(--panel); }
+  .modal-close:focus-visible{ outline:2px solid var(--red-bright); }
+
+  .modal .eyebrow{ font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--red-bright); font-weight:600; margin:0 0 8px; }
+  .modal h3{ font-family:'Anton', sans-serif; font-weight:400; font-size:26px; margin:0 0 4px; color:var(--bone); }
+  .modal .modal-sub{ font-size:13px; color:var(--muted); margin:0 0 26px; }
+
+  .field{ margin-bottom:16px; }
+  .field label{ display:block; font-size:12px; letter-spacing:.06em; color:var(--bone-dim); margin-bottom:8px; }
+  .field input, .field textarea{
+    width:100%; background:var(--panel); border:1px solid var(--line); border-radius:3px;
+    padding:13px 14px; color:var(--bone); font-family:'Inter', sans-serif; font-size:14.5px;
+  }
+  .field input:focus, .field textarea:focus{ outline:none; border-color:var(--red-bright); }
+  .field textarea{ resize:vertical; min-height:70px; }
+
+  .modal-summary{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:12px 14px; background:var(--panel); border:1px solid var(--line); border-radius:3px;
+    font-size:13px; color:var(--bone-dim); margin-bottom:20px;
+  }
+  .modal-summary strong{ color:var(--bone); }
+
+  .submit-btn{
+    all:unset; cursor:pointer; display:block; width:100%; text-align:center;
+    padding:16px; background:var(--red); color:#f4ece6; font-weight:700;
+    font-size:13.5px; letter-spacing:.1em; text-transform:uppercase; border-radius:3px;
+    transition:background .2s;
+  }
+  .submit-btn:hover{ background:var(--red-bright); }
+  .submit-btn:disabled{ opacity:.55; cursor:not-allowed; }
+  .submit-btn:focus-visible{ outline:2px solid var(--bone); outline-offset:3px; }
+
+  .form-error{ font-size:12px; color:var(--red-bright); margin:-6px 0 14px; display:none; }
+  .form-error.show{ display:block; }
+
+  .success-view{ text-align:center; padding:20px 0 6px; display:none; }
+  .success-view.show{ display:block; }
+  .success-view .mark{ font-family:'Alex Brush', cursive; font-size:44px; color:var(--red-bright); margin-bottom:6px; }
+  .success-view h4{ font-family:'Anton', sans-serif; font-weight:400; font-size:22px; margin:6px 0 10px; }
+  .success-view p{ font-size:13.5px; color:var(--muted); line-height:1.6; }
+
+  /* ---------- footer ---------- */
+  footer{
+    border-top:1px solid var(--line); padding:44px clamp(20px,5vw,64px) 34px;
+    display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between;
+  }
+  footer .brand span{ font-size:13px; }
+  footer .foot-links{ display:flex; gap:22px; font-size:12px; color:var(--muted); }
+  footer .foot-links a{ text-decoration:none; transition:color .2s; }
+  footer .foot-links a:hover{ color:var(--bone); }
+  footer .copy{ font-size:11.5px; color:var(--muted); width:100%; text-align:center; margin-top:10px; }
+
+  @media (max-width: 860px){
+    .product{ grid-template-columns:1fr; }
+    .gallery{ position:static; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .scroll-cue .line{ animation:none; }
+    *{ transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<header>
+  <a class="brand" href="#top">
+    <span class="dot"></span>
+    <span>ARRESTAR STUDIO</span>
+  </a>
+  <nav>
+    <a href="https://www.instagram.com/arrst.std/" target="_blank" rel="noopener">Instagram ↗</a>
+  </nav>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero-content">
+    <div class="hero-eyebrow">Drop 01 · #seenfromheaven</div>
+    <h1>THE HAND IS <em>STILL</em> THERE.</h1>
+    <p class="hero-sub">worldwide. wear your way.</p>
+    <div class="badge"><span class="globe">🌍</span> Одна річ. Знайдена в ефірі. Ваша.</div>
+  </div>
+  <div class="scroll-cue"><span>Дивитись</span><span class="line"></span></div>
+</section>
+
+<section class="product">
+  <div class="gallery">
+    <div class="stage">
+      <img id="stage-img" src="img/hoodie-1.jpg" alt="ARRESTAR Zip Hoodie — червона зіпка, вигляд повністю">
+      <div class="stage-overlay"><span>signed by hand</span></div>
+    </div>
+    <div class="thumbs">
+      <button class="active" data-img="img/hoodie-1.jpg" aria-label="Показати перше фото"><img src="img/hoodie-1.jpg" alt=""></button>
+      <button data-img="img/hoodie-2.jpg" aria-label="Показати друге фото"><img src="img/hoodie-2.jpg" alt=""></button>
+    </div>
+  </div>
+
+  <div class="details">
+    <div class="eyebrow">Zip Hoodie · Red</div>
+    <h2>ARRESTAR Zip Hoodie</h2>
+    <div class="price-row">
+      <span class="price">$150</span>
+      <span class="price-note">безкоштовна доставка worldwide</span>
+    </div>
+    <p class="desc">
+      Потерта так, ніби вже прожила з тобою рік. Необроблені краї рукавів, ручна фінішна обробка швів,
+      тиха вишивка на рукаві — роспис, який не повторюється. Зроблено малою партією:
+      коли розберуть — цього більше не буде.
+    </p>
+
+    <span class="field-label">Розмір</span>
+    <div class="sizes" id="sizes">
+      <button data-size="S">S</button>
+      <button data-size="M">M</button>
+      <button data-size="L">L</button>
+      <button data-size="XL">XL</button>
+    </div>
+    <p class="size-hint" id="size-hint">Оберіть розмір</p>
+
+    <button class="buy-btn" id="open-modal">Купити в 1 клік</button>
+
+    <div class="assurance">
+      <div>✓ Оплата при отриманні</div>
+      <div>✓ Відповідь протягом дня</div>
+      <div>✓ Лімітована партія</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a class="brand" href="#top"><span class="dot"></span><span>ARRESTAR STUDIO</span></a>
+  <div class="foot-links">
+    <a href="https://www.instagram.com/arrst.std/" target="_blank" rel="noopener">Instagram</a>
+    <a href="#top">Нагору ↑</a>
+  </div>
+  <div class="copy">© 2026 ARRESTAR STUDIO. Worldwide. Wear your way.</div>
+</footer>
+
+<div class="modal-backdrop" id="modal-backdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button class="modal-close" id="modal-close" aria-label="Закрити">✕</button>
+
+    <div id="form-view">
+      <div class="eyebrow">Оформлення</div>
+      <h3 id="modal-title">Купити в 1 клік</h3>
+      <p class="modal-sub">Заповніть дані — ми зв'яжемось для підтвердження.</p>
+
+      <div class="modal-summary">
+        <span>ARRESTAR Zip Hoodie</span>
+        <strong id="summary-size">Розмір: —</strong>
+      </div>
+
+      <form id="order-form">
+        <div class="field">
+          <label for="f-name">Ім'я та прізвище</label>
+          <input type="text" id="f-name" required autocomplete="name" placeholder="Ваше ім'я">
+        </div>
+        <div class="field">
+          <label for="f-phone">Телефон</label>
+          <input type="tel" id="f-phone" required autocomplete="tel" placeholder="+380 XX XXX XX XX">
+        </div>
+        <div class="field">
+          <label for="f-address">Адреса доставки</label>
+          <textarea id="f-address" required autocomplete="street-address" placeholder="Місто, відділення / вулиця, будинок"></textarea>
+        </div>
+        <p class="form-error" id="form-error">Перевірте, будь ласка, всі поля.</p>
+        <button type="submit" class="submit-btn" id="submit-btn">Оформити замовлення</button>
+      </form>
+    </div>
+
+    <div class="success-view" id="success-view">
+      <div class="mark">✓ signed.</div>
+      <h4>Замовлення прийнято</h4>
+      <p>Дякуємо! Ми зв'яжемось з вами найближчим часом для підтвердження деталей.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---- gallery ----
+  const stageImg = document.getElementById('stage-img');
+  document.querySelectorAll('.thumbs button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.thumbs button').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      stageImg.style.opacity = 0;
+      setTimeout(()=>{ stageImg.src = btn.dataset.img; stageImg.style.opacity = 1; }, 150);
+    });
+  });
+
+  // ---- size selection ----
+  let selectedSize = null;
+  const sizeHint = document.getElementById('size-hint');
+  document.querySelectorAll('#sizes button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('#sizes button').forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedSize = btn.dataset.size;
+      sizeHint.textContent = 'Розмір: ' + selectedSize;
+      sizeHint.classList.remove('error');
+    });
+  });
+
+  // ---- modal open/close ----
+  const backdrop = document.getElementById('modal-backdrop');
+  const openBtn = document.getElementById('open-modal');
+  const closeBtn = document.getElementById('modal-close');
+  const summarySize = document.getElementById('summary-size');
+  const formView = document.getElementById('form-view');
+  const successView = document.getElementById('success-view');
+
+  openBtn.addEventListener('click', ()=>{
+    if(!selectedSize){
+      sizeHint.textContent = 'Будь ласка, оберіть розмір перед замовленням';
+      sizeHint.classList.add('error');
+      document.getElementById('sizes').scrollIntoView({behavior:'smooth', block:'center'});
+      return;
+    }
+    summarySize.textContent = 'Розмір: ' + selectedSize;
+    formView.style.display = 'block';
+    successView.classList.remove('show');
+    backdrop.classList.add('open');
+  });
+
+  function closeModal(){ backdrop.classList.remove('open'); }
+  closeBtn.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', (e)=>{ if(e.target === backdrop) closeModal(); });
+  document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeModal(); });
+
+  // ---- order submit -> Telegram ----
+  const TELEGRAM_TOKEN = '8595745927:AAH9CASLEoL1Sh_7SU1kPk32XGpgwjz4wNY';
+  const TELEGRAM_CHAT_ID = '764000214';
+
+  const form = document.getElementById('order-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const formError = document.getElementById('form-error');
+
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const name = document.getElementById('f-name').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
+    const address = document.getElementById('f-address').value.trim();
+
+    if(!name || !phone || !address){
+      formError.classList.add('show');
+      return;
+    }
+    formError.classList.remove('show');
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Надсилаємо...';
+
+    const text =
+`🛒 НОВЕ ЗАМОВЛЕННЯ — ARRESTAR Zip Hoodie
+Розмір: ${selectedSize}
+Ім'я: ${name}
+Телефон: ${phone}
+Адреса доставки: ${address}
+Ціна: $150`;
+
+    try{
+      const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text })
+      });
+      if(!res.ok) throw new Error('Telegram error');
+
+      formView.style.display = 'none';
+      successView.classList.add('show');
+      form.reset();
+      document.querySelectorAll('#sizes button').forEach(b=>b.classList.remove('selected'));
+      selectedSize = null;
+      sizeHint.textContent = 'Оберіть розмір';
+    }catch(err){
+      formError.textContent = 'Не вдалось надіслати замовлення. Спробуйте ще раз або напишіть нам напряму в Instagram.';
+      formError.classList.add('show');
+    }finally{
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Оформити замовлення';
+    }
+  });
+</script>
+
+</body>
+</html>
